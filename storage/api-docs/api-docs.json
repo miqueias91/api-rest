@@ -1,0 +1,140 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "API Rest",
+        "license": {
+            "name": "MIT"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/auth/login": {
+            "post": {
+                "tags": [
+                    "Autenticate"
+                ],
+                "summary": "Login user",
+                "description": "Login user",
+                "operationId": "5db09a35f965c6ca7529ed3c3cae8e21",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/api/v1/students": {
+            "get": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Fetch Students list",
+                "description": "Fetch Students list",
+                "operationId": "41c3d758b858bb02dc6d1985d0f9cc24",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "search",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Create Student",
+                "description": "Create Student",
+                "operationId": "1432d338c2255e672dfe6f53c9d53dbc",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/v1/students/{id}": {
+            "get": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Fetch Student",
+                "description": "Fetch Student",
+                "operationId": "c59f7599153822e2a6d508c60b5595ac",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Autenticate",
+            "description": "Autenticate"
+        },
+        {
+            "name": "Students",
+            "description": "Students"
+        }
+    ]
+}
