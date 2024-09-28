@@ -2,48 +2,77 @@
 
 declare(strict_types=1);
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
 use function Pest\Laravel\getJson;
 
-it('can fetch students list', function () {
-    actingAs(testUser());
+uses(RefreshDatabase::class);
 
-    expect(getJson('api/v1/students'))
-        ->assertOk();
-});
+function createStudent()
+{
+    return testStudent();
+}
 
-it('can not fetch students list without authentication', function () {
-    expect(getJson('api/v1/students'))
-        ->assertUnauthorized();
-});
+describe('Fetch Student API', function () {
 
-it('can fetch student', function () {
-    actingAs(testUser());
+    it('can fetch students list with authentication', function () {
+        authenticate();
 
-    $payload = [
-        'name' => fake()->name(),
-        'email' => fake()->email(),
-    ];
+        createStudent();
+        createStudent();
+        createStudent();
 
-    $students = \App\Models\student::create($payload);
+        $response = getJson('api/v1/students')
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => ['id', 'name', 'email', 'created_at', 'updated_at'],
+                ],
+            ]);
 
-    $id = $students->id;
+        expect($response->json('data'))->toHaveCount(3);
 
-    expect(getJson('api/v1/students/' . $id))
-        ->assertOk();
-});
+        $firstStudent = $response->json('data')[0];
+        $this->assertNotNull($firstStudent['id']);
+        $this->assertNotNull($firstStudent['name']);
+    });
 
-it('can not fetch student without authentication', function () {
-    $id = 1;
+    it('can not fetch students list without authentication', function () {
+        getJson('api/v1/students')
+            ->assertUnauthorized()
+            ->assertJson(['message' => 'Token not provided']);
+    });
 
-    expect(getJson('api/v1/students/' . $id))
-        ->assertUnauthorized();
-});
+    it('can fetch a specific student with authentication', function () {
+        authenticate();
 
-it('can not fetch student without valid id', function () {
-    actingAs(testUser());
+        $student = createStudent();
 
-    $id = 'abc';
+        $response = getJson('api/v1/students/'.$student->uuid)
+            ->assertOk()
+            ->assertJsonStructure(['id', 'name', 'email', 'created_at', 'updated_at']);
 
-    expect(getJson('api/v1/students/' . $id))
-        ->assertNotFound();
+        expect($response->json('id'))->toBe($student->uuid);
+        expect($response->json('name'))->toBe($student->name);
+        expect($response->json('email'))->toBe($student->email);
+    });
+
+    it('can not fetch a student without authentication', function () {
+        $student = createStudent();
+
+        getJson('api/v1/students/'.$student->uuid)
+            ->assertUnauthorized()
+            ->assertJson(['message' => 'Token not provided']);
+    });
+
+    it('can not fetch a student with an invalid uuid', function () {
+        authenticate();
+
+        $invalidUuid = '00000000-0000-0000-0000-000000000000';
+
+        getJson('api/v1/students/'.$invalidUuid)
+            ->assertNotFound()
+            ->assertJson(['message' => 'No query results for model [Modules\\Student\\Models\\Student].']);
+    });
+
 });

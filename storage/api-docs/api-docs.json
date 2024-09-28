@@ -15,7 +15,7 @@
                 ],
                 "summary": "Login user",
                 "description": "Login user",
-                "operationId": "5db09a35f965c6ca7529ed3c3cae8e21",
+                "operationId": "2d0f20787e05d7face1de433b6727c52",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -43,14 +43,14 @@
                 }
             }
         },
-        "/api/v1/students": {
+        "/api/v1/users": {
             "get": {
                 "tags": [
-                    "Students"
+                    "Users"
                 ],
-                "summary": "Fetch Students list",
-                "description": "Fetch Students list",
-                "operationId": "41c3d758b858bb02dc6d1985d0f9cc24",
+                "summary": "Fetch Users list",
+                "description": "Fetch Users list",
+                "operationId": "79e1348c56d8a16b5321753ffb26a294",
                 "parameters": [
                     {
                         "name": "search",
@@ -66,7 +66,366 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": {}
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "The response data",
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": [
+                                        {
+                                            "id": "9d12795b-138b-47c9-912e-01eff34cdaa5",
+                                            "name": "User",
+                                            "email": "user@example.com",
+                                            "active": true,
+                                            "created_at": "2024-09-22T17:38:29.000000Z",
+                                            "updated_at": "2024-09-22T17:38:29.000000Z"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/v1/users/{uuid}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Fetch User",
+                "description": "Fetch User",
+                "operationId": "feedf2402b02770f70808b6077657cb2",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "The response data",
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "id": "9d12795b-138b-47c9-912e-01eff34cdaa5",
+                                        "name": "User",
+                                        "email": "user@example.com",
+                                        "active": true,
+                                        "created_at": "2024-09-22T17:38:29.000000Z",
+                                        "updated_at": "2024-09-22T17:38:29.000000Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update User",
+                "description": "Update User",
+                "operationId": "68beb0720b70b04c958a26a5daf0bf0d",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "current_password": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "The response data",
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "id": "9d12795b-138b-47c9-912e-01eff34cdaa5",
+                                        "name": "User",
+                                        "email": "user@example.com",
+                                        "active": true,
+                                        "created_at": "2024-09-22T17:38:29.000000Z",
+                                        "updated_at": "2024-09-22T17:38:29.000000Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Create User",
+                "description": "Create User",
+                "operationId": "c839a51cc6c4dfc6e6c405313abd115d",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "The response data",
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "id": "9d12795b-138b-47c9-912e-01eff34cdaa5",
+                                        "name": "User",
+                                        "email": "user@example.com",
+                                        "active": true,
+                                        "created_at": "2024-09-22T17:38:29.000000Z",
+                                        "updated_at": "2024-09-22T17:38:29.000000Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Delete User",
+                "description": "Delete User",
+                "operationId": "0439c2b373bd227939e1b4373f0b3760",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/v1/students": {
+            "get": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Fetch Students list",
+                "description": "Fetch Students list",
+                "operationId": "66992b07a24419f015b23b650c8da5b1",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "search",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "The response data",
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": [
+                                        {
+                                            "id": "9d12795b-138b-47c9-912e-01eff34cdaa5",
+                                            "name": "Student",
+                                            "email": "student@example.com",
+                                            "active": true,
+                                            "created_at": "2024-09-22T17:38:29.000000Z",
+                                            "updated_at": "2024-09-22T17:38:29.000000Z"
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            }
+        },
+        "/api/v1/students/{uuid}": {
+            "get": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Fetch Student",
+                "description": "Fetch Student",
+                "operationId": "2b0cd8250bdcd5f0ff97c959fd970614",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "The response data",
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "id": "9d12795b-138b-47c9-912e-01eff34cdaa5",
+                                        "name": "Student",
+                                        "email": "student@example.com",
+                                        "active": true,
+                                        "created_at": "2024-09-22T17:38:29.000000Z",
+                                        "updated_at": "2024-09-22T17:38:29.000000Z"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Students"
+                ],
+                "summary": "Update Student",
+                "description": "Update Student",
+                "operationId": "c20624e1d51d8197ac6b251ced58760e",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "current_password": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "The response data",
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "id": "9d12795b-138b-47c9-912e-01eff34cdaa5",
+                                        "name": "Student",
+                                        "email": "student@example.com",
+                                        "active": true,
+                                        "created_at": "2024-09-22T17:38:29.000000Z",
+                                        "updated_at": "2024-09-22T17:38:29.000000Z"
+                                    }
+                                }
+                            }
                         }
                     },
                     "401": {
@@ -80,7 +439,7 @@
                 ],
                 "summary": "Create Student",
                 "description": "Create Student",
-                "operationId": "1432d338c2255e672dfe6f53c9d53dbc",
+                "operationId": "64fe5598b19d6227a380863a761989bc",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -91,6 +450,12 @@
                                     },
                                     "email": {
                                         "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string"
                                     }
                                 },
                                 "type": "object"
@@ -100,25 +465,45 @@
                 },
                 "responses": {
                     "201": {
-                        "description": "Created"
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "data": {
+                                            "description": "The response data",
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "type": "object",
+                                    "example": {
+                                        "id": "9d12795b-138b-47c9-912e-01eff34cdaa5",
+                                        "name": "Student",
+                                        "email": "student@example.com",
+                                        "active": true,
+                                        "created_at": "2024-09-22T17:38:29.000000Z",
+                                        "updated_at": "2024-09-22T17:38:29.000000Z"
+                                    }
+                                }
+                            }
+                        }
                     },
                     "401": {
                         "description": "Unauthorized"
                     }
                 }
-            }
-        },
-        "/api/v1/students/{id}": {
-            "get": {
+            },
+            "delete": {
                 "tags": [
                     "Students"
                 ],
-                "summary": "Fetch Student",
-                "description": "Fetch Student",
-                "operationId": "c59f7599153822e2a6d508c60b5595ac",
+                "summary": "Delete Student",
+                "description": "Delete Student",
+                "operationId": "dd828443b1721410b49e1401cda05e7b",
                 "responses": {
-                    "200": {
-                        "description": "OK"
+                    "204": {
+                        "description": "No Content"
                     },
                     "401": {
                         "description": "Unauthorized"
@@ -131,6 +516,10 @@
         {
             "name": "Autenticate",
             "description": "Autenticate"
+        },
+        {
+            "name": "Users",
+            "description": "Users"
         },
         {
             "name": "Students",

@@ -2,38 +2,111 @@
 
 declare(strict_types=1);
 
-use Illuminate\Support\Str;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Modules\Student\Models\Student;
 
 use function Pest\Laravel\postJson;
 
-it('can create a new student', function () {
-    actingAs(testUser());
+uses(RefreshDatabase::class);
 
-    $payload = [
-        'name' => 'Test Student',
-        'email' => 'teststudent@email.com'
-    ];
+describe('Create Student API', function () {
 
-    expect(postJson('api/v1/students', $payload))
-        ->assertCreated();
+    it('can create a new student with authentication', function () {
+        authenticate();
 
-});
+        $payload = [
+            'name' => 'Test Student',
+            'email' => 'teststudent@email.com',
+        ];
 
-it('can not create a new student without authentication', function () {
-    $payload = [
-        'name' => 'Test Student',
-        'email' => 'teststudent@email.com'
-    ];
+        $response = postJson('api/v1/students', $payload)
+            ->assertCreated()
+            ->assertJsonStructure(['id', 'name', 'email', 'created_at', 'updated_at']);
 
-    expect(postJson('api/v1/students', $payload))
-        ->assertUnauthorized();
-});
+        $this->assertDatabaseHas('students', [
+            'email' => 'teststudent@email.com',
+            'name' => 'Test Student',
+        ]);
 
-it('can not create a new student with content empty', function () {
-    actingAs(testUser());
+        expect($response->json('name'))->toBe('Test Student');
+        expect($response->json('email'))->toBe('teststudent@email.com');
+    });
 
-    $payload = [];
+    it('can not create a new student without authentication', function () {
+        $payload = [
+            'name' => 'Test Student',
+            'email' => 'teststudent@email.com',
+        ];
 
-    expect(postJson('api/v1/students', $payload))
-        ->assertUnprocessable();
+        postJson('api/v1/students', $payload)
+            ->assertUnauthorized()
+            ->assertJson(['message' => 'Token not provided']);
+    });
+
+    it('can not create a new student with content empty', function () {
+        authenticate();
+
+        $payload = [];
+
+        postJson('api/v1/students', $payload)
+            ->assertUnprocessable()
+            ->assertJsonStructure(['errors']);
+    });
+
+    it('can not create a student with an existing email', function () {
+        authenticate();
+
+        Student::create([
+            'name' => 'Test Student',
+            'email' => 'existing@email.com',
+        ]);
+
+        $payload = [
+            'name' => 'Test Student',
+            'email' => 'existing@email.com',
+        ];
+
+        postJson('api/v1/students', $payload)
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['email']);
+    });
+
+    it('can not create a student with invalid email format', function () {
+        authenticate();
+
+        $payload = [
+            'name' => 'Test Student',
+            'email' => 'invalid-email',
+        ];
+
+        postJson('api/v1/students', $payload)
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['email']);
+    });
+
+    it('can not create a student with a too long name', function () {
+        authenticate();
+
+        $payload = [
+            'name' => str_repeat('A', 256),
+            'email' => 'teststudent@email.com',
+        ];
+
+        postJson('api/v1/students', $payload)
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['name']);
+    });
+
+    it('can not create a student with a too short name', function () {
+        authenticate();
+
+        $payload = [
+            'name' => str_repeat('A', 2),
+            'email' => 'teststudent@email.com',
+        ];
+
+        postJson('api/v1/students', $payload)
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors(['name']);
+    });
 });

@@ -1,0 +1,21 @@
+meta {
+  name: Update User
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{url}}/api/v1/users/9d1ac3a3-7637-4918-bd60-b31cda978dea
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "admin",
+    "email": "admin@example.com",
+    "current_password": "password",
+    "password": "password",
+    "password_confirmation": "password"
+  }
+}

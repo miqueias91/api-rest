@@ -14,8 +14,9 @@ declare(strict_types=1);
 */
 
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Modules\Auth\Models\User;
+use Modules\Student\Models\Student;
 
 use function Pest\Laravel\withoutMiddleware;
 
@@ -72,10 +73,20 @@ function testUser(): User
     return $user;
 }
 
-function dumbStudentData(): array
+function testStudent(): Student
 {
-    return [
-        'name' => 'John Doe',
-        'email' => 'john.doe@example.com',
-    ];
+    $student = new Student([
+        'name' => fake()->name(),
+        'email' => fake()->email(),
+        'uuid' => fake()->uuid(),
+    ]);
+
+    $student->save();
+
+    return $student;
+}
+
+function authenticate()
+{
+    actingAs(testUser());
 }

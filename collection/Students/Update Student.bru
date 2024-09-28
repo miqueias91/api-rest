@@ -1,0 +1,18 @@
+meta {
+  name: Update Student
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{url}}/api/v1/students/9d1ac3a3-7637-4918-bd60-b31cda978dea
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "student@example.com",
+    "email": "student@example.com"
+  }
+}
